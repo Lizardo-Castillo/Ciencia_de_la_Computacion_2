@@ -1,4 +1,0 @@
-﻿  Menu.cpp
-C:\Users\User\Documents\Visual Studio - Trabajos\C++\SFML_2\Project1\Project1\Menu.cpp(140,25): warning C4305: 'argumento': truncamiento de 'double' a 'float'
-C:\Users\User\Documents\Visual Studio - Trabajos\C++\SFML_2\Project1\Project1\Menu.cpp(143,27): warning C4305: 'argumento': truncamiento de 'double' a 'float'
-  Project1.vcxproj -> C:\Users\User\Documents\Visual Studio - Trabajos\C++\SFML_2\Project1\x64\Debug\Project1.exe
