@@ -1,0 +1,140 @@
+#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
+
+int main() {
+    // Crear una ventana
+    sf::RenderWindow window(sf::VideoMode(1200, 900), "Bomberman");
+
+    // Crear una textura y cargar la imagen PNG
+    sf::Texture texture;
+    if (!texture.loadFromFile("AudioVisual/Imagenes/Menu/Fondo.png")) {
+        // Error al cargar la imagen
+        return 1;
+    }
+
+    // Crear un sprite y asignar la textura
+    sf::Sprite sprite;
+    sprite.setTexture(texture);
+
+    // Crear una instancia de sf::Music y cargar el archivo de audio
+    sf::Music music;
+    if (!music.openFromFile("AudioVisual/Audio/Menu/Intro.wav")) {
+        // Error al cargar el archivo de audio
+        return -1;
+    }
+
+    // Reproducir el audio
+    music.play();
+
+    // Crear una textura y cargar la imagen PNG de la nave
+    sf::Texture shipTexture;
+    if (!shipTexture.loadFromFile("AudioVisual/Imagenes/Menu/Nave.png")) {
+        // Error al cargar la imagen de la nave
+        return 1;
+    }
+
+    // Crear un sprite para la imagen de la nave
+    sf::Sprite shipSprite;
+    shipSprite.setTexture(shipTexture);
+
+    // Posicionar el sprite de la nave en la posición inicial
+    shipSprite.setPosition(0, (window.getSize().y - shipTexture.getSize().y) / 2);
+
+    // Crear un objeto sf::Clock para controlar el tiempo
+    sf::Clock clock;
+
+    // Bucle principal del programa
+    while (window.isOpen()) {
+        // Procesar eventos
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                window.close();
+            }
+        }
+
+        // Obtener el tiempo transcurrido desde el inicio del programa
+        sf::Time elapsedTime = clock.getElapsedTime();
+
+        // Limpiar la ventana
+        window.clear();
+
+        // Dibujar el sprite en la ventana
+        window.draw(sprite);
+
+        // Calcular la posición X de la nave en función del tiempo transcurrido
+        float shipPosX = 1.5f * (elapsedTime.asSeconds() / 0.08f);
+        // Aplicar el movimiento circular a la posición X
+        shipPosX = std::fmod(shipPosX, window.getSize().x);
+
+        // Posicionar la nave en la posición calculada
+        shipSprite.setPosition(shipPosX, shipSprite.getPosition().y);
+
+        // Dibujar la nave en la ventana
+        window.draw(shipSprite);
+
+        // Mostrar la ventana
+        window.display();
+
+        // Si ha pasado más de 6.28 segundos, salir del bucle y mostrar solo la imagen sin degradado
+        if (elapsedTime.asSeconds() >= 6.28f) {
+            break;
+        }
+    }
+
+    // Cargar la imagen del título
+    sf::Texture titleTexture;
+    if (!titleTexture.loadFromFile("AudioVisual/Imagenes/Menu/Titulo.png")) {
+        // Error al cargar la imagen del título
+        return 1;
+    }
+
+    // Crear un sprite para la imagen del título
+    sf::Sprite titleSprite;
+    titleSprite.setTexture(titleTexture);
+
+    // Posicionar el sprite del título en el centro de la ventana
+    titleSprite.setPosition((window.getSize().x - titleTexture.getSize().x) / 2, (window.getSize().y - titleTexture.getSize().y) / 2);
+
+    // Bucle principal del programa (solo muestra la imagen sin degradado y el título)
+    while (window.isOpen()) {
+        // Procesar eventos
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                window.close();
+            }
+        }
+
+        // Limpiar la ventana
+        window.clear();
+
+        // Dibujar el sprite en la ventana
+        window.draw(sprite);
+
+        // Obtener el tiempo transcurrido desde el inicio del programa
+        sf::Time elapsedTime = clock.getElapsedTime();
+
+        // Calcular la posición X de la nave en función del tiempo transcurrido
+        float shipPosX = 1.5f * (elapsedTime.asSeconds() / 0.08f);
+        // Aplicar el movimiento circular a la posición X
+        shipPosX = std::fmod(shipPosX, window.getSize().x);
+
+        // Posicionar la nave en la posición calculada
+        shipSprite.setPosition(shipPosX, shipSprite.getPosition().y);
+
+        // Dibujar la nave en la ventana (detrás del título)
+        window.draw(shipSprite);
+
+        // Si ha pasado más de 5.07 segundos, mostrar la imagen del título
+        if (elapsedTime.asSeconds() >= 5.07f) {
+            // Dibujar el sprite del título en la ventana
+            window.draw(titleSprite);
+        }
+
+        // Mostrar la ventana
+        window.display();
+    }
+
+    return 0;
+}

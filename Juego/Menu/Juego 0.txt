@@ -1,0 +1,132 @@
+#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
+#include <iostream>
+
+int main()
+{
+    //<>
+    // Crea una instancia de sf::RenderWindow
+    sf::RenderWindow window(sf::VideoMode(1200, 900), "Bomberman");
+
+    // Crear una instancia de sf::Music y cargar el archivo de audio
+    sf::Music music;
+    music.openFromFile("AudioVisual/Audio/Menu/Intro.wav");
+    // Reproducir el audio
+    music.play();
+
+    // Crear una textura y cargar la imagen de Fondo
+    sf::Texture texture;
+    texture.loadFromFile("AudioVisual/Imagenes/Menu/Fondo.png");
+    // Crear un sprite y asignar la imagen de Fondo
+    sf::Sprite sprite;
+    sprite.setTexture(texture);
+
+    // Crear una textura y cargar la imagen PNG de la Nave
+    sf::Texture shipTexture;
+    shipTexture.loadFromFile("AudioVisual/Imagenes/Menu/Nave.png");
+    // Crear un sprite para la imagen de la Nave
+    sf::Sprite shipSprite;
+    shipSprite.setTexture(shipTexture);
+    // Posicionar el sprite de la Nave en la posición inicial
+    shipSprite.setPosition(0, 0);
+
+    // Crear una textura y cargar la imagen PNG de la NaveG
+    sf::Texture shipGTexture;
+    shipGTexture.loadFromFile("AudioVisual/Imagenes/Menu/NaveG.png");
+    // Crear un sprite para la imagen de la NaveG
+    sf::Sprite shipGSprite;
+    shipGSprite.setTexture(shipGTexture);
+    // Posicionar el sprite de la NaveG en la posición inicial
+    shipGSprite.setPosition(335, 0);
+
+    // Crear una textura y cargar la imagen PNG del Titulo
+    sf::Texture Titulo;
+    Titulo.loadFromFile("AudioVisual/Imagenes/Menu/Titulo.png");
+    // Crear un sprite para la imagen de la Nave
+    sf::Sprite TituloSprite;
+    TituloSprite.setTexture(Titulo);
+
+    // Crear una textura y cargar la imagen PNG del Titulo
+    sf::Texture Letras;
+    Letras.loadFromFile("AudioVisual/Imagenes/Menu/Letras.png");
+    // Crear un sprite para la imagen de la Nave
+    sf::Sprite LetrasSprite;
+    LetrasSprite.setTexture(Letras);
+
+    // Crear una textura y cargar la imagen PNG del BotonSelec
+    sf::Texture BotonSelec;
+    BotonSelec.loadFromFile("AudioVisual/Imagenes/Menu/Seleccionar.png");
+    // Crear un sprite para la imagen de la Nave
+    sf::Sprite SelecSprite;
+    SelecSprite.setTexture(BotonSelec);
+    // Posicionar el sprite de la Nave en la posición inicial
+    shipSprite.setPosition(0, 0);
+
+    //Parpadeo Blanco
+    sf::RectangleShape rectangle(sf::Vector2f(1200, 900));
+    rectangle.setFillColor(sf::Color::White);
+
+    // Crear un objeto sf::Clock para controlar el tiempo
+    sf::Clock clock;
+    float tiempo = 0.0f;
+
+    // Bucle principal
+    while (window.isOpen())
+    {
+        // Procesa los eventos
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
+
+        float tiempo2 = clock.restart().asSeconds();
+        tiempo += tiempo2;
+
+        // Actualizar la posición del sprite shipSprite
+        shipSprite.move(0.003, 0);
+
+        // Actualizar la posición del sprite shipGSprite
+        shipGSprite.move(-0.025, 0);
+
+        window.clear(); // Limpia la ventana
+
+        // Dibuja el sprite de la imagen de fondo
+        window.draw(sprite);
+
+        // Dibujar la nave en la ventana
+        window.draw(shipSprite);
+
+        // Dibujar la nave en la ventana
+        window.draw(shipGSprite);
+
+        //Para la aparicion del titulo
+        if (tiempo >= 5.07f) {
+            window.draw(TituloSprite);
+        }
+
+        //Para la aparicion de las Letras
+        if (tiempo >= 5.08) {
+            window.draw(LetrasSprite);
+        }
+
+        //Para la aparicion del Boton seleccionar
+        if (tiempo >= 9.16f) {
+            window.draw(SelecSprite);
+        }
+
+        //Para el parpadeo blanco
+        if (tiempo >= 5.06f && tiempo <= 5.08f) {
+            window.draw(rectangle);
+        }
+
+        // Mostrar la ventana
+        window.display();
+
+        std::cout << tiempo << " ";
+
+    }
+
+    return 0;
+}

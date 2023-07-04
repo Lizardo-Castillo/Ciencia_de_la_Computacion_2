@@ -1,0 +1,108 @@
+#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
+
+int main()
+{
+    sf::RenderWindow window(sf::VideoMode(1200, 900), "SFML Movimiento");
+
+    // Crear una textura y cargar la imagen de Fondo
+    sf::Texture Fondo;
+    Fondo.loadFromFile("AudioVisual/Imagenes/Menu/Fondo_Prueba.png");
+    // Crear un sprite y asignar la imagen de Fondo
+    sf::Sprite Fondosprite;
+    Fondosprite.setTexture(Fondo);
+
+    // Cargar el sonido
+    sf::SoundBuffer buffer;
+    buffer.loadFromFile("AudioVisual/Audio/Menu/Seleccionar.wav");
+
+    // Crear el objeto sf::Sound y asignar el buffer cargado
+    sf::Sound sound;
+    sound.setBuffer(buffer);
+
+    // Cargar la imagen
+    sf::Texture texture;
+    texture.loadFromFile("AudioVisual/Imagenes/Menu/Seleccionar.png");
+
+    // Crear un sprite y asignar la textura cargada
+    sf::Sprite sprite;
+    sprite.setTexture(texture);
+    sprite.setPosition(0, 0);
+
+    float velocidad = 58.0f;   // Velocidad de movimiento en unidades por iteración
+    bool moverArriba = false;
+    bool moverAbajo = false;
+    float cont = 0.0;
+
+    while (window.isOpen())
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                window.close();
+            if (cont >= 200) {
+                if (event.type == sf::Event::KeyPressed)
+                {
+                    if (event.key.code == sf::Keyboard::Up)
+                    {
+                        if (!moverArriba)
+                        {
+                            // Mover el sprite hacia arriba una vez
+                            sprite.move(0, -velocidad);
+                            sound.play();  // Reproducir el sonido
+                        }
+
+                        moverArriba = true;
+                    }
+                    else if (event.key.code == sf::Keyboard::Down)
+                    {
+                        if (!moverAbajo)
+                        {
+                            // Mover el sprite hacia abajo una vez
+                            sprite.move(0, velocidad);
+                            sound.play();  // Reproducir el sonido
+                        }
+
+                        moverAbajo = true;
+                    }
+                }
+
+                if (event.type == sf::Event::KeyReleased)
+                {
+                    if (event.key.code == sf::Keyboard::Up)
+                    {
+                        moverArriba = false;
+                    }
+                    else if (event.key.code == sf::Keyboard::Down)
+                    {
+                        moverAbajo = false;
+                    }
+                }
+            }
+        }
+
+        cont += 0.01;
+
+        // Verificar la primera posición del sprite
+        if (sprite.getPosition().y > 117)
+        {
+            sprite.setPosition(0, 0);
+        }
+
+        // Verificar la segunda posición del sprite
+        if (sprite.getPosition().y < 0)
+        {
+            sprite.setPosition(0, 116);
+        }
+
+        window.clear();
+        //window.draw(Fondosprite);
+        if (cont >= 200) {
+            window.draw(sprite);
+        }
+        window.display();
+    }
+
+    return 0;
+}
